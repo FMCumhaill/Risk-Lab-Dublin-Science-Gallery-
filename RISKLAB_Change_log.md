@@ -20,5 +20,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 # [1.2.1] - 2017 -11 -21
 ## Added
 ### Fionn_Delahunty
--Begin with data file _Risklab_2.0_
--Created file _distribution_ to test assumptions 
+- Begin with data file _Risklab_2.0_
+- Created file _distribution_ to test assumptions 
