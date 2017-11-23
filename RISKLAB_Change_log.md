@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Private]
 
 ## [1.1.0] - 2017-11-03
 ### Added
@@ -20,5 +20,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 # [1.2.1] - 2017 -11 -21
 ## Added
 ### Fionn_Delahunty
--Begin with data file _Risklab_2.0_
+-Created new data file _Risklab 2.0_ because I was confused about previous files 
 -Created file _distribution_ to test assumptions 
+
+# [1.2.2] - 2017 -11 -23
+## Added
+### Fionn_Delahunty
+
