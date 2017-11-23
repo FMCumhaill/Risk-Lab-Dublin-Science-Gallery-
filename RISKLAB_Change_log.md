@@ -17,9 +17,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - Wrote function to sum total BIS score and 6 sub scores (New columns added: 'BIS_Sum' 'BIS_Attention' 'BIS_Cog_Instability' 'BIS_Motor''BIS_Perseverance' 'BIS_self_control' 'BIS_Cog_Complexity')
 - Wrote function to sum total DOSPERT sub scales (New colums added: 'DOS_Ethical' 'DOS_Fin_Investment''DOS_Fin_Gambling''DOS_HealthSafety' 'DOS_Recreational' 'DOS_Social')
 
-# [1.2.1] - 2017 -11 -21
-## Added
+## [1.2.1] - 2017 -11 -21
+### Added
 ### Fionn_Delahunty
+<<<<<<< HEAD
 -Created new data file _Risklab 2.0_ because I was confused about previous files 
 -Created file _distribution_ to test assumptions 
 
@@ -27,3 +28,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ## Added
 ### Fionn_Delahunty
 
+=======
+- Begin with data file _Risklab_2.0_
+- Created file _distribution_ to test assumptions 
+>>>>>>> a1b856c902db87f736f1f3b0f93da02ed85c6de9
