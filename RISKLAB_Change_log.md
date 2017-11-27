@@ -23,17 +23,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 -Created new data file _Risklab 2.0_ because I was confused about previous files 
 -Created file _distribution_ to test assumptions 
 
-# [1.2.2] - 2017 -11 -23
+## [1.2.2] - 2017 -11 -23
 ## Added
 ### Fionn_Delahunty
 - Begin with data file _Risklab_2.0_
 - Created file _distribution_ to test assumptions 
 
-# [1.2.3] - 2017 -11 -27
+## [1.2.3] - 2017 -11 -27
 ## Added
 ### Fionn_Delahunty
--Finished file _Risk+Taking+Verse+Cigarette+.ipynb_ 
--Sorted folder 
+- Finished file _Risk+Taking+Verse+Cigarette+.ipynb_ 
+- Sorted folder 
 
 
 
