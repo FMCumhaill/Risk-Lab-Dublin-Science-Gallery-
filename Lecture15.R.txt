@@ -1,0 +1,478 @@
+### R code from vignette source 'Lecture12-2015.Rnw'
+
+###################################################
+### code chunk number 1: log-1
+###################################################
+x<-rnorm(100)
+y<-rbinom(100,1,exp(1+2*x)/(1+exp(1+2*x)))
+plot(x,y,ylim=c(-.2,1.2),xlim=c(-3,3))
+mm<-lm(y~x)
+lines(c(-3,3),mm$coef[1]+mm$coef[2]*c(-3,3))
+abline(h=.5,lty=2)
+abline(v=(.5-mm$coef[1])/mm$coef[2],lty=2)
+
+
+###################################################
+### code chunk number 2: log-1b
+###################################################
+boxplot(x~y)
+
+
+###################################################
+### code chunk number 3: log-2
+###################################################
+plot(x,y,ylim=c(-.2,1.2),xlim=c(-3,3))
+mm1<-glm(y~x,'binomial')
+pp<-predict(mm1,type='response')
+lines(sort(x),pp[sort.list(x)])
+abline(h=.5,lty=2)
+abline(v=(-mm1$coef[1]/mm1$coef[2]),lty=2)
+
+
+###################################################
+### code chunk number 4: log-3
+###################################################
+y1<-rbinom(100,1,exp(1+2*x)/(1+exp(1+2*x)))
+mm1<-glm(y1~x,'binomial')
+pp<-predict(mm1,type='response')
+plot(sort(x),pp[sort.list(x)],type='l',ylab="probability")
+y1<-rbinom(100,1,exp(1+5*x)/(1+exp(1+5*x)))
+mm1<-glm(y1~x,'binomial')
+pp<-predict(mm1,type='response')
+lines(sort(x),pp[sort.list(x)],col=2)
+y1<-rbinom(100,1,exp(1-2*x)/(1+exp(1-2*x)))
+mm1<-glm(y1~x,'binomial')
+pp<-predict(mm1,type='response')
+lines(sort(x),pp[sort.list(x)],col=3)
+legend(-1.5,.75,c("b1=2","b1=5","b1=-2"),col=c(1,2,3))
+
+
+###################################################
+### code chunk number 5: log-4
+###################################################
+logit<-function(z) {ll<-log(z/(1-z))}
+x1<-rnorm(100)
+x2<-rbinom(100,1,.5)
+y<-rbinom(100,1,exp(1+2*x1+3*x2)/(1+exp(1+2*x1+3*x2)))
+gg<-glm(y~x1+x2,'binomial')
+pp<-predict(gg,type='response')
+plot(sort(x1[x2==0]),logit(gg$fit[x2==0])[sort.list(x1[x2==0])],type='l',ylab="log-odds",xlab="x1")
+lines(sort(x1[x2==1]),logit(gg$fit[x2==1])[sort.list(x1[x2==1])],lty=2)
+legend(-2,4,c("x2=0","x2=1"),lty=c(1,2))
+
+
+###################################################
+### code chunk number 6: log-4
+###################################################
+x1<-rnorm(100)
+x2<-rbinom(100,1,.5)
+y<-rbinom(100,1,exp(1+1*x1+2*x2)/(1+exp(1+1*x1+2*x2)))
+gg<-glm(y~x1+as.factor(x2),'binomial')
+pp<-predict(gg,type='response')
+xvec<-seq(-4,4,by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]
+plot(xvec,p0,type='l',ylab='log-odds',xlab='x1')
+lines(xvec,p1,lty=2)
+legend(2,-1,c("x2=0","x2=1"),lty=c(1,2))
+
+
+###################################################
+### code chunk number 7: log-4b
+###################################################
+pp0<-exp(p0)/(1+exp(p0))
+pp1<-exp(p1)/(1+exp(p1))
+plot(xvec,pp0,type='l',ylab='log-odds',xlab='x1')
+lines(xvec,pp1,lty=2)
+legend(1,.4,c("x2=0","x2=1"),lty=c(1,2))
+
+
+###################################################
+### code chunk number 8: log-4c
+###################################################
+y<-rbinom(100,1,exp(1+1*x1+2*x2+2*x1*x2)/(1+exp(1+1*x1+2*x2+2*x1*x2)))
+gg<-glm(y~x1*as.factor(x2),'binomial')
+xvec<-seq(-4,4,by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='x1')
+lines(xvec,p1,lty=2)
+legend(1,0,c("x2=0","x2=1"),lty=c(1,2))
+
+
+###################################################
+### code chunk number 9: log-4d
+###################################################
+pp0<-exp(p0)/(1+exp(p0))
+pp1<-exp(p1)/(1+exp(p1))
+plot(xvec,pp0,type='l',ylab='log-odds',xlab='x1')
+lines(xvec,pp1,lty=2)
+legend(1,.5,c("x2=0","x2=1"),lty=c(1,2))
+
+
+###################################################
+### code chunk number 10: log-5
+###################################################
+x<-rnorm(250)
+y<-rbinom(250,1,exp(1+3*x)/(1+exp(1+3*x)))
+gg<-glm(y~x,'binomial')
+res<-residuals(gg,'pearson')
+plot(logit(gg$fit),res,xlab="linear predictor",ylab="pearson residual")
+ll<-loess(res[sort.list(logit(gg$fit))]~sort(logit(gg$fit)))
+lines(ll$x,ll$fit,col=2)
+abline(h=0,lty=2)
+
+
+###################################################
+### code chunk number 11: log-5b
+###################################################
+res<-residuals(gg,'deviance')
+plot(logit(gg$fit),res,xlab="linear predictor",ylab="dev residual")
+ll<-loess(res[sort.list(logit(gg$fit))]~sort(logit(gg$fit)))
+lines(ll$x,ll$fit,col=2)
+abline(h=0,lty=2)
+
+
+###################################################
+### code chunk number 12: log-5c
+###################################################
+library(stats)
+hh<-hatvalues(gg)
+plot(hh,type='h',ylab="leverage",xlab="index")
+
+
+###################################################
+### code chunk number 13: log-5d
+###################################################
+library(stats)
+dd<-cooks.distance(gg)
+plot(dd,type='h',ylab="cook's distance",xlab="index")
+
+
+###################################################
+### code chunk number 14: log-5e
+###################################################
+dev.change<-residuals(gg,'deviance')^2+residuals(gg,'pearson')^2*(hh/(1-hh))
+plot(dev.change,type='h')
+
+
+###################################################
+### code chunk number 15: log-7
+###################################################
+SA<-data.frame(read.table('SA.dat',sep='\t',header=T))
+y<-SA$chd
+xt<-(SA$ldl)
+hh<-hist(xt,plot=F)
+x2<-xt
+for (kk in (1:length(hh$breaks)-1)) {
+  x2[xt<=hh$breaks[kk+1] & xt>hh$breaks[kk]]<-hh$mid[kk] }
+tt<-table(y,x2)
+ttt<-logit(tt[2,]/apply(tt,2,sum))
+#
+plot(sort(unique(x2)),ttt,xlab="grouped x",ylab="log-odds")
+gg<-glm(y~xt,'binomial')
+pp<-predict(gg,response='link',se=T)
+lines(sort(xt),pp$fit[sort.list(xt)])
+lines(sort(xt),(pp$fit-pp$se)[sort.list(xt)],lty=2)
+lines(sort(xt),(pp$fit+pp$se)[sort.list(xt)],lty=2)
+
+
+###################################################
+### code chunk number 16: log-7b
+###################################################
+SA<-data.frame(read.table('SA.dat',sep='\t',header=T))
+y<-SA$chd
+xt<-log(SA$ldl)
+hh<-hist(xt,plot=F)
+x2<-xt
+for (kk in (1:length(hh$breaks)-1)) {
+  x2[xt<=hh$breaks[kk+1] & xt>hh$breaks[kk]]<-hh$mid[kk] }
+tt<-table(y,x2)
+ttt<-logit(tt[2,]/apply(tt,2,sum))
+#
+plot(sort(unique(x2)),ttt,xlab="grouped x",ylab="log-odds")
+gg<-glm(y~xt,'binomial')
+pp<-predict(gg,response='link',se=T)
+lines(sort(xt),pp$fit[sort.list(xt)])
+lines(sort(xt),(pp$fit-pp$se)[sort.list(xt)],lty=2)
+lines(sort(xt),(pp$fit+pp$se)[sort.list(xt)],lty=2)
+
+
+###################################################
+### code chunk number 17: log-ldl-1
+###################################################
+SA<-data.frame(read.table('SA.dat',sep='\t',header=T)) ## read in the data
+xt<-SA$age
+y<-SA$chd
+hh<-hist(xt,plot=F)
+x2<-xt
+for (kk in (1:length(hh$breaks)-1)) {
+  x2[xt<=hh$breaks[kk+1] & xt>hh$breaks[kk]]<-hh$mid[kk] }
+tt<-table(y,x2)
+ttt<-logit(tt[2,]/apply(tt,2,sum))
+#
+plot(sort(unique(x2)),ttt,xlab="age",ylab="log-odds")
+gg<-glm(y~xt,'binomial')
+pp<-predict(gg,response='link',se=T)
+lines(sort(xt),pp$fit[sort.list(xt)])
+lines(sort(xt),(pp$fit-pp$se)[sort.list(xt)],lty=2)
+lines(sort(xt),(pp$fit+pp$se)[sort.list(xt)],lty=2)
+
+
+###################################################
+### code chunk number 18: log-ldl-1b
+###################################################
+xt<-log(SA$age)
+hh<-hist(xt,plot=F)
+x2<-xt
+for (kk in (1:length(hh$breaks)-1)) {
+  x2[xt<=hh$breaks[kk+1] & xt>hh$breaks[kk]]<-hh$mid[kk] }
+tt<-table(y,x2)
+ttt<-logit(tt[2,]/apply(tt,2,sum))
+#
+plot(sort(unique(x2)),ttt,xlab="log(age)",ylab="log-odds")
+gg<-glm(y~xt,'binomial')
+pp<-predict(gg,response='link',se=T)
+lines(sort(xt),pp$fit[sort.list(xt)])
+lines(sort(xt),(pp$fit-pp$se)[sort.list(xt)],lty=2)
+lines(sort(xt),(pp$fit+pp$se)[sort.list(xt)],lty=2)
+
+
+###################################################
+### code chunk number 19: log-ldl-2
+###################################################
+gg<-glm(chd~log(ldl)+log(age)+alcohol+tobind+sbp+typea
+        +adiposity+obesity+as.factor(famhist),data=SA,'binomial')
+print(gs<-summary(gg))
+
+
+###################################################
+### code chunk number 20: log-ldl-3
+###################################################
+res<-residuals(gg,'pearson')
+plot(logit(gg$fit),res,xlab="linear predictor",ylab="pearson residual")
+ll<-loess(res[sort.list(logit(gg$fit))]~sort(logit(gg$fit)))
+lines(ll$x,ll$fit,col=2)
+abline(h=0,lty=2)
+
+
+###################################################
+### code chunk number 21: log-ldl-3b
+###################################################
+res<-residuals(gg,'deviance')
+plot(logit(gg$fit),res,xlab="linear predictor",ylab="dev residual")
+ll<-loess(res[sort.list(logit(gg$fit))]~sort(logit(gg$fit)))
+lines(ll$x,ll$fit,col=2)
+abline(h=0,lty=2)
+
+
+###################################################
+### code chunk number 22: log-ldl-3c
+###################################################
+hh<-hatvalues(gg)
+plot(hh,type='h',ylab="leverage",xlab="index")
+
+
+###################################################
+### code chunk number 23: log-ldl-3d
+###################################################
+library(stats)
+dd<-cooks.distance(gg)
+plot(dd,type='h',ylab="cook's distance",xlab="index")
+
+
+###################################################
+### code chunk number 24: log-ldl-4
+###################################################
+par(mfrow=c(2,2))
+plot(gg)
+
+
+###################################################
+### code chunk number 25: log-ldl-4b
+###################################################
+par(mfrow=c(1,1))
+dev.change<-residuals(gg,'deviance')^2+residuals(gg,'pearson')^2*(hh/(1-hh))
+plot(seq(1,dim(SA)[1]),dev.change,type='h')
+id<-identify(dev.change,pos=T)
+
+
+###################################################
+### code chunk number 26: log-ldl-4b2
+###################################################
+plot(seq(1,dim(SA)[1]),dev.change,type='h')
+if (max(id$ind)!=-Inf) {
+text(seq(1,dim(SA)[1])[id$ind],dev.change[id$ind],id$ind,pos=id$pos) }
+
+
+###################################################
+### code chunk number 27: log-ldl-5
+###################################################
+print(step(gg))
+selg<-step(gg,trace=F)
+print(summary(selg))
+
+
+###################################################
+### code chunk number 28: log-ldl-6
+###################################################
+plot(logit(selg$fit),SA$chd,xlab="linear predictor",ylab="chd")
+lines(sort(logit(selg$fit)),selg$fit[sort.list(selg$fit)])
+
+
+###################################################
+### code chunk number 29: log-ldl-7
+###################################################
+pp<-predict(selg,type='response')
+pp[pp<.5]<-0
+pp[pp>=.5]<-1
+table(pp,SA$chd)
+print(c("Misclassification error=", round(sum(pp!=SA$chd)/length(SA$chd),3)))
+
+
+###################################################
+### code chunk number 30: log-ldl-8
+###################################################
+par(mfrow=c(2,2))
+gg<-glm(chd~log(age)*as.factor(famhist),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(log(SA$age)),max(log(SA$age)),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='log(age)',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+#
+gg<-glm(chd~log(ldl)*as.factor(famhist),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(log(SA$ldl)),max(log(SA$ldl)),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='log(ldl)',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+#
+gg<-glm(chd~typea*as.factor(famhist),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(SA$typea),max(SA$typea),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='typea',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+#
+gg<-glm(chd~obesity*as.factor(famhist),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(SA$obesity),max(SA$obesity),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='obesity',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+
+
+###################################################
+### code chunk number 31: log-ldl-9
+###################################################
+par(mfrow=c(2,2))
+gg<-glm(chd~log(age)*as.factor(tobind),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(log(SA$age)),max(log(SA$age)),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='log(age)',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+#
+gg<-glm(chd~log(ldl)*as.factor(tobind),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(log(SA$ldl)),max(log(SA$ldl)),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='log(ldl)',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+#
+gg<-glm(chd~typea*as.factor(tobind),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(SA$typea),max(SA$typea),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='typea',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+#
+gg<-glm(chd~obesity*as.factor(tobind),'binomial',data=SA)
+pp<-predict(gg,type='response')
+xvec<-seq(min(SA$obesity),max(SA$obesity),by=.1)
+p0<-gg$coef[1]+gg$coef[2]*xvec
+p1<-gg$coef[1]+gg$coef[2]*xvec+gg$coef[3]+gg$coef[4]*xvec
+plot(xvec,p0,type='l',ylab='log-odds',xlab='obesity',ylim=c(min(logit(gg$fit)),max(logit(gg$fit))))
+lines(xvec,p1,lty=2)
+
+
+###################################################
+### code chunk number 32: log-ldl-10
+###################################################
+gg<-glm(chd~as.factor(famhist)*(log(ldl)+log(age)+sbp+adiposity+obesity+alcohol+typea+as.factor(tobind)),'binomial',data=SA)
+print(summary(gg))
+selg<-step(gg,trace=F)
+print(summary(selg))
+par(mfrow=c(2,2))
+plot(selg)
+####
+res<-residuals(selg,'pearson')
+plot(logit(selg$fit),res,xlab="linear predictor",ylab="pearson residual")
+ll<-loess(res[sort.list(logit(selg$fit))]~sort(logit(selg$fit)))
+lines(ll$x,ll$fit,col=2)
+abline(h=0,lty=2)
+
+
+###################################################
+### code chunk number 33: log-ldl-10b
+###################################################
+ss<-summary(selg)
+c2<-solve(diag(diag(ss$cov.sc)))^{1/2}%*%ss$cov.sc%*%solve(diag(diag(ss$cov.sc)))^{1/2}
+print(c2)
+################
+# Run a train/test for prediction error assessment
+jj<-sample(seq(1,312),200)
+gg<-glm(as.factor(chd)~., data=SA,family="binomial",subset=jj)
+print(summary(gg))
+#
+selg<-step(gg,trace=F)
+print(summary(selg))
+#
+par(mfrow=c(2,2))
+plot(selg)
+#
+res<-residuals(selg,'pearson')
+plot(logit(selg$fit),res,xlab="linear predictor",ylab="pearson residual")
+ll<-loess(res[sort.list(logit(selg$fit))]~sort(logit(selg$fit)))
+lines(ll$x,ll$fit,col=2)
+abline(h=0,lty=2)
+#
+pp<-predict(gg,newdata=SA[-jj,-10],type="response")
+table(round(pp), SA[-jj,10])
+length(pp[round(pp)!=SA[-jj,10]])/length(pp)
+pp<-predict(selg,newdata=SA[-jj,-10],type="response")
+table(round(pp), SA[-jj,10])
+length(pp[round(pp)!=SA[-jj,10]])/length(pp)
+### Not great. 30percent error because groups overlap a lot
+################ application to wine data
+jj<-sample(seq(1,130),80)
+gg<-glm(as.factor(class)~., data=wine,family="binomial",subset=jj)
+print(summary(gg))
+# glm might give you a warning that your estimated probabilities are 0 or 1 exaclty
+# the wine data is easy to separate in terms of class!
+# You can also see this as really high variance for the estimated coefficients
+selg<-step(gg,trace=F)
+print(summary(selg))
+#
+par(mfrow=c(2,2))
+plot(selg)
+#
+res<-residuals(selg,'pearson')
+plot(logit(selg$fit),res,xlab="linear predictor",ylab="pearson residual")
+ll<-loess(res[sort.list(logit(selg$fit))]~sort(logit(selg$fit)))
+lines(ll$x,ll$fit,col=2)
+abline(h=0,lty=2)
+#
+pp<-predict(gg,newdata=wine[-jj,-1],type="response")
+table(round(pp), wine[-jj,1])
+pp<-predict(selg,newdata=wine[-jj,-1],type="response")
+table(round(pp), wine[-jj,1])
+# You do a great job predicting the class!
