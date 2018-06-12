@@ -11,7 +11,7 @@ Files (All in python notebook format):
 * __BIS Self Control Verse Car Crashes .ipynb:__ Predicting the number of car crashes from a measure of self control (BIS)
 * __Model for Smoking.ipynb:__ Building a prediction model to predict if a participant in the dataset has smoked during their lifetime.
 * __Model for drinking.ipynb:__ Building a prediction model to predict the age that a participant started drinking alcohol
-* __Scales_converter.ipynb:__ Converts the orginial dataset into useable format. 
+ 
 
 Datasets:
 * __RISKLAB_10_11_17.csv:__ Orginal uneditted dataset 
